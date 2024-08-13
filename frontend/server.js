@@ -12,7 +12,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.redirect('/index');
 });
-
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
 // Send HTML files
 app.get('/index', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
