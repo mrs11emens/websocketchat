@@ -1,0 +1,90 @@
+package server
+
+import (
+	"fmt"
+	"net/http"
+	"sync"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
+)
+
+var upgrader = websocket.Upgrader{
+    CheckOrigin: func(r *http.Request) bool {
+        return true
+    },
+}
+
+type Client struct {
+    conn *websocket.Conn
+    id   string
+    name string
+}
+
+var (
+    clients   = make(map[*Client]bool)
+    clientsMu sync.Mutex
+    mode      = "id" // "id" or "name"
+)
+
+func generateClientID() string {
+    return uuid.NewString()
+}
+
+func HandleConnection(w http.ResponseWriter, r *http.Request) {
+    conn, err := upgrader.Upgrade(w, r, nil)
+    if err != nil {
+        fmt.Println("Error while upgrading connection:", err)
+        return
+    }
+    defer conn.Close()
+
+    clientID := generateClientID()
+    client := &Client{conn: conn, id: clientID}
+
+    clientsMu.Lock()
+    clients[client] = true
+    clientsMu.Unlock()
+
+    fmt.Printf("Client %s connected\n", clientID)
+
+    // Получаем и сохраняем никнейм
+    _, msg, err := conn.ReadMessage()
+    if err == nil {
+        client.name = string(msg)
+        fmt.Printf("Client %s set name to %s\n", clientID, client.name)
+    }
+
+    for {
+        messageType, msg, err := conn.ReadMessage()
+        if err != nil {
+            fmt.Println("Error while reading message:", err)
+            break
+        }
+
+        if string(msg) == "/toggle" {
+            if mode == "id" {
+                mode = "name"
+            } else {
+                mode = "id"
+            }
+            msg = []byte("Mode changed to " + mode)
+        }
+
+        fmt.Printf("Received from %s: %s\n", clientID, msg)
+
+        clientsMu.Lock()
+        for c := range clients {
+            displayID := c.id
+            if mode == "name" && c.name != "" {
+                displayID = c.name
+            }
+            if err := c.conn.WriteMessage(messageType, []byte(fmt.Sprintf("[%s] %s", displayID, msg))); err != nil {
+                fmt.Println("Error while writing message:", err)
+                c.conn.Close()
+                delete(clients, c)
+            }
+        }
+        clientsMu.Unlock()
+    }
+}

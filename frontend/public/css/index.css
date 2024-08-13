@@ -1,0 +1,72 @@
+/* Общие стили */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Основной контейнер входа */
+.mainlogin {
+    background: #2a2a2a;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeInUp 1s ease;
+}
+
+/* Поле ввода никнейма */
+input.nickname {
+    width: 80%;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.3s ease;
+}
+
+input.nickname:focus {
+    outline: none;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Кнопка входа */
+button {
+    margin-top: 20px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #6a5acd, #8a2be2);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #8a2be2, #6a5acd);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,32 @@
+<!-- chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="user-list">
+        <h3>Кто в сети:</h3>
+        <ul id="user-list"></ul>
+    </div>
+    <div class="chat-container">
+        <div id="chat-box" class="chat-box"></div>
+        <input type="text" id="message-input" class="message-input" placeholder="Введите сообщение...">
+        <button id="send-button" class="send-button">Отправить</button>
+    </div>
+    <div class="chat-settings">
+        <div class="settings">
+            <label>
+                <input type="radio" name="displayMode" value="id"> Показывать клиентские ID
+            </label>
+            <label>
+                <input type="radio" name="displayMode" value="name" checked> Показывать никнеймы
+            </label>
+        </div>
+    <script src="/js/chat.js"></script>
+</body>
+</html>
